@@ -24,12 +24,13 @@ model Post {
 }
 
 model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String
-  name    String?
-  address Address?
-  age     Int?
-  Post    Post[]
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  email    String   @unique
+  password String
+  name     String?
+  address  Address?
+  age      Int?
+  Post     Post[]
 }
 
 model comment {
