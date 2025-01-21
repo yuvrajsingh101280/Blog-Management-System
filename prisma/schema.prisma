@@ -28,6 +28,7 @@ model User {
   email   String
   name    String?
   address Address?
+  age     Int?
   Post    Post[]
 }
 
