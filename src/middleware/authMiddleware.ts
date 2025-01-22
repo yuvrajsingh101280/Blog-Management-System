@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import client from "../../prisma/client";
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
   try {
@@ -15,8 +16,24 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
       res.status(404).json({ success: false, message: "Invalid token" });
     }
 
-    req.body.userId = decoded.userId;
+    const user = await client.user.findUnique({
+      where: { id: decoded.userId },
+    });
+
+    if (!user) {
+      res
+        .status(400)
+        .json({ success: false, message: "Ivalid token user not found" });
+    }
     next();
+    res.status(200).json({
+      success: true,
+      message: "User authenticated",
+      user: {
+        ...user,
+        password: undefined,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal Server error" });

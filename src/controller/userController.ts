@@ -75,16 +75,3 @@ export const logout = (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "User logged out" });
 };
 
-export const checkauth = async (req: Request, res: Response) => {
-  const user = await client.user.findUnique({ where: { id: req.body.userId } });
-  try {
-    if (!user) {
-      res.status(404).json({ success: false, message: "user not found" });
-    }
-
-    res.status(200).json({ success: true, message: "User is authenticated" });
-  } catch (error) {
-    console.log("user is not authenticated", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-};

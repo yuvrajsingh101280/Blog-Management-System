@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes";
 import client from "../prisma/client";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import postrouter from "./routes/PostRoutes";
 const testconnection = async () => {
   try {
     await client.$connect();
@@ -27,7 +28,7 @@ app.use(express.json());
 // /router
 
 app.use("/api/users", userRoutes);
-
+app.use("/api/post", postrouter);
 app.listen(port, () => {
   console.log(`server starting at http://localhost:${port}`);
 });
