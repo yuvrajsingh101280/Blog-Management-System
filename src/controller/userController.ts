@@ -27,8 +27,10 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       res.status(200).json({
         success: true,
         message: "user created successfully",
-        ...user,
-        password: undefined,
+        user: {
+          ...user,
+          password: undefined,
+        },
       });
     }
   } catch (error) {
@@ -71,4 +73,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const logout = (req: Request, res: Response) => {
   res.clearCookie("token");
   res.status(200).json({ success: true, message: "User logged out" });
+};
+
+export const checkauth = async (req: Request, res: Response) => {
+  const user = await client.user.findUnique({ where: { id: req.body.userId } });
+  try {
+    if (!user) {
+      res.status(404).json({ success: false, message: "user not found" });
+    }
+
+    res.status(200).json({ success: true, message: "User is authenticated" });
+  } catch (error) {
+    console.log("user is not authenticated", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };
